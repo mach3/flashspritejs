@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DEMO</title>
+</head>
+<body>
+
+	<div class="items">
+		<div class="item">
+			<h1>DEMO</h1>
+			<div class="demo">
+				<div id="demo-01" style="display:none"></div>
+				<p>
+					<button id="button-play">PLAY</button>
+					<button id="button-stop">STOP</button>
+					<button id="button-reverse">REVERSE</button>
+				</p>
+				<p>
+					<button class="button-fps" data-fps="10">FPS:10</button>
+					<button class="button-fps" data-fps="30">FPS:30</button>
+					<button class="button-fps" data-fps="60">FPS:60</button>
+				</p>
+				<p>
+					<button id="button-gotoandstop">Go to frame 10 and stop</button>
+					<button id="button-gotoandplay">Go to frame 20 and play</button>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<script src="../components/jquery/jquery.min.js"></script>
+	<script src="../src/flashsprite.js"></script>
+	<script>
+
+	(function(){
+
+		var node = $("#demo-01");
+
+		node.on("flashSpriteReady", function(){
+			$(this).fadeIn().flashSprite("play");
+		})
+		.flashSprite({
+			src : "./data/sample.json",
+			autoPlay : false
+		});
+
+		$("#button-stop").on("click", function(){
+			node.flashSprite("stop");
+		});
+		$("#button-play").on("click", function(){
+			node.flashSprite("play");
+		});
+		$("#button-reverse").on("click", function(){
+			node.flashSprite("reverse");
+		});
+		$(".button-fps").on("click", function(){
+			var fps = $(this).data("fps");
+			node.flashSprite("config", { fps : fps });
+		});
+		$("#button-gotoandstop").on("click", function(){
+			node.flashSprite("gotoAndStop", 10);
+		});
+		$("#button-gotoandplay").on("click", function(){
+			node.flashSprite("gotoAndPlay", 20);
+		});
+
+	}());
+
+	</script>
+	
+</body>
+</html>
