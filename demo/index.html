@@ -3,29 +3,92 @@
 <head>
 	<meta charset="UTF-8">
 	<title>DEMO</title>
+	<style>
+
+	.demo {
+		width: 800px;
+		margin: 0 auto;
+		font-size: 13px;
+	}
+	#stage {
+		position :relative;
+		width: 100%;
+		height: 200px;
+		background-color: #f0f0f0;
+	}
+
+	#stage div {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -16px;
+		margin-left: -16px;
+	}
+	p {
+		position: relative;
+		margin: 10px 0;
+		line-height: 24px;
+	}
+	button {
+		font-size: 1em;
+		vertical-align: top;
+	}
+	strong {
+		vertical-align: top;
+	}
+	label {
+		vertical-align: top;
+	}
+	input[type=radio]{
+		vertical-align: top;
+	}
+	span.sep {
+		display: inline-block;
+		*display: inline;
+		*zoom: 1;
+		height: 24px;
+		border-left: 1px solid #ccc;
+		margin: 0 1em;
+		vertical-align: top;
+	}
+
+	</style>
 </head>
 <body>
 
-	<div class="items">
-		<div class="item">
-			<h1>DEMO</h1>
-			<div class="demo">
-				<div id="demo-01" style="display:none"></div>
-				<p>
-					<button id="button-play">PLAY</button>
-					<button id="button-stop">STOP</button>
-					<button id="button-reverse">REVERSE</button>
-				</p>
-				<p>
-					<button class="button-fps" data-fps="10">FPS:10</button>
-					<button class="button-fps" data-fps="30">FPS:30</button>
-					<button class="button-fps" data-fps="60">FPS:60</button>
-				</p>
-				<p>
-					<button id="button-gotoandstop">Go to frame 10 and stop</button>
-					<button id="button-gotoandplay">Go to frame 20 and play</button>
-				</p>
-			</div>
+	<div class="demo">
+		<h1>DEMO</h1>
+		<div id="stage"></div>
+		<div id="controls">
+			<p>
+				<button id="button-init">Load Animation</button>
+				<span class="sep"></span>
+				<button id="button-play">Play</button>
+				<button id="button-stop">Stop</button>
+				<button id="button-reverse">Reverse</button>
+				<button id="button-rewind">Rewind</button>
+				<span class="sep"></span>
+				<button class="button-go" value="stop">Go to 15 &amp; stop</button>
+				<button class="button-go" value="play">Go to 15 &amp; play</button>
+			</p>
+			<p>
+			</p>
+			<p>
+			</p>
+			<p>
+				<strong>FPS : </strong>
+				<label><input type="radio" name="fps" value="10">10</label>
+				<label><input type="radio" name="fps" value="30" checked>30</label>
+				<label><input type="radio" name="fps" value="60">60</label>
+				<span class="sep"></span>
+				<strong>Repeat : </strong>
+				<label><input type="radio" name="repeat" value="true" checked>Repeat</label>
+				<label><input type="radio" name="repeat" value="false">Not repeat</label>
+				<span class="sep"></span>
+				<strong>Frame : </strong>
+				<span id="frame"></span>
+			</p>
+			
 		</div>
 	</div>
 
@@ -35,34 +98,86 @@
 
 	(function(){
 
-		var node = $("#demo-01");
+		var node, stage, controls;
 
-		node.on("flashSpriteReady", function(){
-			$(this).fadeIn().flashSprite("play");
-		})
-		.flashSprite({
-			src : "./data/sample.json",
-			autoPlay : false
+		stage = $("#stage");
+
+		controls = {
+			init : $("#button-init"),
+			fps : $("input[name=fps]"),
+			play : $("#button-play"),
+			stop : $("#button-stop"),
+			reverse : $("#button-reverse"),
+			rewind : $("#button-rewind"),
+			repeat : $("input[name=repeat]"),
+			go : $(".button-go"),
+			frame : $("#frame")
+		};
+
+
+		controls.init.on("click", function(){
+			if(! node){
+				node = $("<div>");
+				node.on("flashSpriteReady", function(){
+					node.appendTo(stage);
+				})
+				.on("flashSpriteEnd", function(){
+					controls.frame.text("END");
+				})
+				.on("flashSpriteEnterFrame", function(){
+					controls.frame.text(node.data("flashSprite").index);
+				})
+				.flashSprite({
+					src : "./data/sample.json",
+					fps : controls.fps.filter(":checked").val(),
+					repeat : (/true/i).test(controls.repeat.filter(":checked").val())
+				});
+			}
 		});
 
-		$("#button-stop").on("click", function(){
-			node.flashSprite("stop");
+		controls.fps.on("change", function(){
+			if(node){
+				node.flashSprite("config", { fps : $(this).val() });
+			}
 		});
-		$("#button-play").on("click", function(){
-			node.flashSprite("play");
+
+		controls.play.on("click", function(){
+			if(node){
+				node.flashSprite("play");
+			}
 		});
-		$("#button-reverse").on("click", function(){
-			node.flashSprite("reverse");
+
+		controls.stop.on("click", function(){
+			if(node){
+				node.flashSprite("stop");
+			}
 		});
-		$(".button-fps").on("click", function(){
-			var fps = $(this).data("fps");
-			node.flashSprite("config", { fps : fps });
+
+		controls.reverse.on("click", function(){
+			if(node){
+				node.flashSprite("reverse");
+			}
 		});
-		$("#button-gotoandstop").on("click", function(){
-			node.flashSprite("gotoAndStop", 10);
+
+		controls.rewind.on("click", function(){
+			if(node){
+				node.flashSprite("rewind");
+			}
 		});
-		$("#button-gotoandplay").on("click", function(){
-			node.flashSprite("gotoAndPlay", 20);
+
+		controls.repeat.on("change", function(){
+			if(node){
+				node.flashSprite("config", { repeat : (/true/i).test($(this).val()) });
+			}
+		});
+
+		controls.go.on("click", function(){
+			var method;
+
+			if(node){
+				method = $(this).val() === "play" ? "gotoAndPlay" : "gotoAndStop";
+				node.flashSprite(method, 15);
+			}
 		});
 
 	}());

@@ -23,10 +23,15 @@
 
 			var my = this;
 
+			this.EVENT_READY = "flashSpriteReady";
+			this.EVENT_END = "flashSpriteEnd";
+			this.EVENT_ENTER_FRAME = "flashSpriteEnterFrame";
+
 			this.options = {
 				src : null,
 				fps : 30,
-				autoPlay : true
+				autoPlay : true,
+				repeat : true
 			};
 
 			this.vars = {
@@ -109,7 +114,7 @@
 				if(this.options.autoPlay){
 					this.play();
 				}
-				this.node.trigger("flashSpriteReady");
+				this.node.trigger(this.EVENT_READY);
 			};
 
 			/**
@@ -121,11 +126,26 @@
 			};
 
 			/**
+			 * Go to next frame
+			 */
+			this.next = function(){
+				var next = (this.index + 1) % (this.vars.length - 1);
+				if(this.options.repeat || next){
+					this._goto(next);
+				}
+			};
+
+			/**
 			 * Forward the frame
 			 */
 			this._forward = function(){
-				my._goto((my.index + 1) % (my.vars.length - 1));
-				my.timer = setTimeout(my._forward, my.vars.interval);
+				var index = my.index;
+				my.next();
+				if(index !== my.index){
+					my.timer = setTimeout(my._forward, my.vars.interval);
+				} else {
+					my.node.trigger(my.EVENT_END);
+				}
 			};
 
 			/**
@@ -137,15 +157,30 @@
 			};
 
 			/**
+			 * Go to previous frame
+			 */
+			this.prev = function(){
+				var next = this.index - 1;
+				if(next < 0){
+					if(! this.options.repeat){
+						return;
+					}
+					next = this.vars.length - 1;
+				}
+				this._goto(next);
+			};
+
+			/**
 			 * Backward the frame
 			 */
 			this._backward = function(){
-				my.index -= 1;
-				if(my.index < 0){
-					my.index = my.vars.length - 1;
+				var index = my.index;
+				my.prev();
+				if(index !== my.index){
+					my.timer = setTimeout(my._backward, my.vars.interval);
+				} else {
+					my.node.trigger(my.EVENT_END);
 				}
-				my._goto(my.index);
-				my.timer = setTimeout(my._backward, my.vars.interval);
 			};
 
 			/**
@@ -156,18 +191,19 @@
 				if(index < 0 || index >= this.vars.length){
 					return;
 				}
-				my.index = index;
+				this.index = index;
 				this.node.css(
 					"background-position",
 					"-" + this.vars.frames[this.index].frame.x + "px -"
 						+ this.vars.frames[this.index].frame.y + "px"
-				);
+				)
+				.trigger(this.EVENT_ENTER_FRAME);
 			};
 
 			/**
 			 * Stop the animation
 			 */
-			my.stop = function(){
+			this.stop = function(){
 				clearTimeout(my.timer);
 				my.timer = null;
 			};
@@ -176,7 +212,7 @@
 			 * Go to the frame and stop the animation
 			 * @param Integer frame
 			 */
-			my.gotoAndStop = function(frame){
+			this.gotoAndStop = function(frame){
 				this.stop();
 				this._goto(frame);
 			};
@@ -185,9 +221,16 @@
 			 * Go to the frame and play the animation
 			 * @param Integer frame
 			 */
-			my.gotoAndPlay = function(frame){
+			this.gotoAndPlay = function(frame){
 				this._goto(frame);
 				this.play();
+			};
+
+			/**
+			 * Rewind to the first frame
+			 */
+			this.rewind = function(){
+				this._goto(0);
 			};
 		}
 	});
@@ -213,6 +256,7 @@
 				}
 				node.data("flashSprite")._call(method, args);
 			});
+			return this;
 		}
 	});
 

@@ -1,6 +1,13 @@
 
 # FlashSprite.js
 
+1. これはなに
+1. クイックスタート
+1. メソッド
+1. オプション
+1. イベント
+1. インスタンス
+
 ## これはなに
 
 Adobe Flash CS6+ で出力されたスプライトアニメーションシートを再生するjQueryベースのライブラリ。
@@ -51,26 +58,42 @@ $("#my-animation").flashSprite("config", { fps : 60 }); // FPSを60に変更
 $("#my-animation").flashSprite("gotoAndPlay", 10); // 10フレーム目に移動して再生
 ```
 
-- init() - 初期化する（省略時の初期値）
+- init(option:Object) - 初期化する（省略時の初期値）
+- config(option:Object) - 設定を変更する
 - play() - 再生する
 - stop() - 停止する
 - reverse() - 逆再生する
+- next() - 次のフレームへ移動する
+- prev() - 前のフレームへ移動する
 - gotoAndStop(frame:Integer) - nフレーム目に移動して停止する
 - gotoAndPlay(frame:Integer) - nフレーム目に移動して再生する
-- config(option:Object) - 設定を変更する
+- rewind() - 0フレーム目へ戻る
 
 ## オプション
 
+"init" あるいは "config" メソッドで設定できます。
+
 - src : Strng (null) - JSONファイルへのパス
-- autoPlay : Boolean (true) - 自動再生をする・しない
 - fps : Integer (30) - アニメーションのFPS（再生速度）
+- autoPlay : Boolean (true) - 自動再生をする・しない
+- repeat : Boolean (true) - 繰り返し再生をする・しない
 
-※初期化以降の"config"メソッドでの再指定で効果があるのはfpsのみです。
+※初期化以降の"config"メソッドでの再指定では、"src" と "autoPlay" は効果がありません。
 
+```javascript
+$("#my-animation").flashSprite({
+	src : "the/path/to/sprite.json",
+	fps : 30,
+	autoPlay : true,
+	repeat : true
+});
+```
 
 ## イベント
 
-FlashSpriteが初期化され、JSONファイルと画像ファイルがロードされたタイミングで "flashSpriteReady" イベントが発火されます。
+### flashSpriteReady
+
+FlashSpriteが初期化され、JSONファイルと画像ファイルがロードされたタイミングで発火します。
 
 ```javascript
 var node = $("#my-animation");
@@ -83,6 +106,31 @@ node.flashSprite({
 	autoPlay : false
 });
 ```
+
+### flashSpriteEnd
+
+"play" または "reverse" で再生中にインデックスが終端に到達して再生が停止した際に発火します。
+
+### flashSpriteEnterFrame
+
+再生またはフレーム操作によりカレントフレームが変更された際に発火します。
+
+
+## インスタンス
+
+FlashSpriteで初期化されたノードのdataに、"flashSprite"としてFlashSpriteのインスタンスが格納してあります。
+メンバに直接アクセスしたい場合に使用してください。
+
+```javascript
+var node = $("#my-animation");
+// フレーム変更時にフレーム番号を出力する
+node.on("flashSpriteEnterFrame", function(){
+	console.log($(this).data("flashSprite").index);
+});
+node.flashSprite({ ... });
+```
+
+-----
 
 ## 作者
 
