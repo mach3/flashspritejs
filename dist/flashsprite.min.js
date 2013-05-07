@@ -3,7 +3,7 @@
  * --------------
  * Load and play sprite animations made by Flash CS6+
  *
- * @version 0.9.0
+ * @version 0.9.1
  * @author mach3 <http://github.com/mach3>
  * @url http://github.com/mach3/flashspritejs
  * @require jquery.js
