@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Flashspritejs by mach3</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Flashspritejs</h1>
+        <p>Load and play sprite animations made by Flash CS6+</p>
+        <p class="view"><a href="https://github.com/mach3/flashspritejs">View the Project on GitHub <small>mach3/flashspritejs</small></a></p>
+        <ul>
+          <li><a href="https://github.com/mach3/flashspritejs/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mach3/flashspritejs/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mach3/flashspritejs">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>FlashSprite.js</h1>
+
+<ol>
+<li>これはなに</li>
+<li>クイックスタート</li>
+<li>メソッド</li>
+<li>オプション</li>
+<li>イベント</li>
+<li>インスタンス</li>
+</ol><h2>これはなに</h2>
+
+<p>Adobe Flash CS6+ で出力されたスプライトアニメーションシートを再生するjQueryベースのライブラリ。</p>
+
+<p>Flash自体にはCreateJS形式等で書きだす機能がありますので
+それらを使えば用のないライブラリですが、</p>
+
+<ul>
+<li>あまり色々ライブラリを読み込みたくない</li>
+<li>宗教上の理由でどうしてもjQueryで再生したい</li>
+</ul><p>などのご要望にお応えする物です。</p>
+
+<h2>クイックスタート</h2>
+
+<h3>1. スプライトシートの作成</h3>
+
+<p>まずAdobe Flash CS6+ でスプライトシートを書き出して任意の場所へ保存します。<br>
+※ 形式は「JSON Array」を選択。</p>
+
+<p>画像ファイルとJSONファイルは同じディレクトリに保存するか、
+別の場所にしたい場合はJSONファイル内の <code>meta.image</code> をJSONファイルからの相対パスで書き換える必要があります。</p>
+
+<h3>2. 配置と初期化</h3>
+
+<p>コンテナとなる任意の要素をHTML上に配置し、</p>
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"my-animation"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+
+<p>$.fn.flashSprite() で初期化します。
+引数のsrcオプションでスプライトシートのJSONファイルへのパスを指定してください。</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">).</span><span class="nx">flashSprite</span><span class="p">({</span>
+    <span class="nx">src</span> <span class="o">:</span> <span class="s2">"the/path/to/sprite.json"</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>メソッド</h2>
+
+<p>各メソッド名を第一引数に渡してコールできます。
+第二引数以降はメソッドに渡されます。</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">).</span><span class="nx">flashSprite</span><span class="p">(</span><span class="s2">"stop"</span><span class="p">);</span> <span class="c1">// 停止する</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">).</span><span class="nx">flashSprite</span><span class="p">(</span><span class="s2">"config"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">fps</span> <span class="o">:</span> <span class="mi">60</span> <span class="p">});</span> <span class="c1">// FPSを60に変更</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">).</span><span class="nx">flashSprite</span><span class="p">(</span><span class="s2">"gotoAndPlay"</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span> <span class="c1">// 10フレーム目に移動して再生</span>
+</pre></div>
+
+<ul>
+<li>init(option:Object) - 初期化する（省略時の初期値）</li>
+<li>config(option:Object) - 設定を変更する</li>
+<li>play() - 再生する</li>
+<li>stop() - 停止する</li>
+<li>reverse() - 逆再生する</li>
+<li>next() - 次のフレームへ移動する</li>
+<li>prev() - 前のフレームへ移動する</li>
+<li>gotoAndStop(frame:Integer) - nフレーム目に移動して停止する</li>
+<li>gotoAndPlay(frame:Integer) - nフレーム目に移動して再生する</li>
+<li>rewind() - 0フレーム目へ戻る</li>
+</ul><h2>オプション</h2>
+
+<p>"init" あるいは "config" メソッドで設定できます。</p>
+
+<ul>
+<li>src : Strng (null) - JSONファイルへのパス</li>
+<li>fps : Integer (30) - アニメーションのFPS（再生速度）</li>
+<li>autoPlay : Boolean (true) - 自動再生をする・しない</li>
+<li>repeat : Boolean (true) - 繰り返し再生をする・しない</li>
+</ul><p>※初期化以降の"config"メソッドでの再指定では、"src" と "autoPlay" は効果がありません。</p>
+
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">).</span><span class="nx">flashSprite</span><span class="p">({</span>
+    <span class="nx">src</span> <span class="o">:</span> <span class="s2">"the/path/to/sprite.json"</span><span class="p">,</span>
+    <span class="nx">fps</span> <span class="o">:</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="nx">autoPlay</span> <span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="nx">repeat</span> <span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>イベント</h2>
+
+<h3>flashSpriteReady</h3>
+
+<p>FlashSpriteが初期化され、JSONファイルと画像ファイルがロードされたタイミングで発火します。</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">);</span>
+<span class="c1">// 自動再生をオフにし、ロード完了時にフェードイン・再生する</span>
+<span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"flashSpriteReady"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">fadeIn</span><span class="p">().</span><span class="nx">flashSprite</span><span class="p">(</span><span class="s2">"play"</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">node</span><span class="p">.</span><span class="nx">flashSprite</span><span class="p">({</span>
+    <span class="nx">src</span> <span class="o">:</span> <span class="s2">"the/path/to/sprite.json"</span><span class="p">,</span>
+    <span class="nx">autoPlay</span> <span class="o">:</span> <span class="kc">false</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>flashSpriteEnd</h3>
+
+<p>"play" または "reverse" で再生中にインデックスが終端に到達して再生が停止した際に発火します。</p>
+
+<h3>flashSpriteEnterFrame</h3>
+
+<p>再生またはフレーム操作によりカレントフレームが変更された際に発火します。</p>
+
+<h2>インスタンス</h2>
+
+<p>FlashSpriteで初期化されたノードのdataに、"flashSprite"としてFlashSpriteのインスタンスが格納してあります。
+メンバに直接アクセスしたい場合に使用してください。</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"#my-animation"</span><span class="p">);</span>
+<span class="c1">// フレーム変更時にフレーム番号を出力する</span>
+<span class="nx">node</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"flashSpriteEnterFrame"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">data</span><span class="p">(</span><span class="s2">"flashSprite"</span><span class="p">).</span><span class="nx">index</span><span class="p">);</span>
+<span class="p">});</span>
+<span class="nx">node</span><span class="p">.</span><span class="nx">flashSprite</span><span class="p">({</span> <span class="p">...</span> <span class="p">});</span>
+</pre></div>
+
+<hr><h2>作者</h2>
+
+<p>mach3</p>
+
+<ul>
+<li><a href="http://blog.mach3.jp">Blog</a></li>
+<li><a href="http://www.mach3.jp">Website</a></li>
+<li><a href="http://twitter.com/mach3ss">Twitter</a></li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/mach3">mach3</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
