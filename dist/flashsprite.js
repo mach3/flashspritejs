@@ -93,8 +93,8 @@
 							+ data.meta.image,
 						frames : data.frames,
 						length : data.frames.length,
-						width : data.frames[0].frame.w,
-						height : data.frames[0].frame.h
+						width : data.frames[0].sourceSize.w,
+						height : data.frames[0].sourceSize.h
 					});
 					img.onload = $.proxy(my._initNode, my);
 					img.src = my.vars.image;
