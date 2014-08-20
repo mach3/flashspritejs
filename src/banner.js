@@ -1,10 +1,10 @@
 /**
  * FlashSprite.js
  * --------------
- * Load and play sprite animations made by Flash CS6+
+ * <%=description %>
  *
- * @version {{version}}
- * @author mach3 <http://github.com/mach3>
+ * @version <%=version %>
+ * @author <%=author %>
  * @url http://github.com/mach3/flashspritejs
  * @require jquery.js
  */

@@ -8,7 +8,7 @@
 		 * @class Load and play sprite animations made by Flash CS6+
 		 * @constructor
 		 */
-		FlashSprite : function(node){
+		FlashSprite: function(node){
 
 			var my = this;
 
@@ -17,20 +17,21 @@
 			this.EVENT_ENTER_FRAME = "flashSpriteEnterFrame";
 
 			this.options = {
-				src : null,
-				fps : 30,
-				autoPlay : true,
-				repeat : true
+				dataHeader: "application/json; charset=utf-16",
+				src: null,
+				fps: 30,
+				autoPlay: true,
+				repeat: true
 			};
 
 			this.vars = {
-				frames : null,
-				meta : null,
-				image : null,
-				width : null,
-				height : null,
-				length : null,
-				interval : null
+				frames: null,
+				meta: null,
+				image: null,
+				width: null,
+				height: null,
+				length: null,
+				interval: null
 			};
 
 			this.node = node;
@@ -72,7 +73,15 @@
 			 * Load JSON published by Flash
 			 */
 			this._load = function(){
-				$.getJSON(this.options.src)
+				var o = this.options;
+				$.ajax({
+					url: o.src,
+					beforeSend: function(xhr){
+						if(o.dataHeader){
+							xhr.overrideMimeType(o.dataHeader);
+						}
+					}
+				})
 				.done(function(data){
 					var img = new Image();
 
@@ -233,10 +242,7 @@
 		flashSprite : function(/* method, arg1, arg2... */){
 			var args, method;
 
-			args = [];
-			$.each(arguments, function(i, value){
-				args.push(value);
-			});
+			args = Array.prototype.slice.call(arguments);
 			method = (typeof args[0] === "string") ? args.shift() : "init";
 			this.each(function(){
 				var node = $(this);

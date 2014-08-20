@@ -1,0 +1,31 @@
+{
+  "name": "flashsprite.js",
+  "version": "0.9.1",
+  "description": "Load and play sprite animations made by Flash CS6+",
+  "main": "dist/flashsprite.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt-contrib-concat": "^0.3.0",
+    "grunt-contrib-uglify": "^0.2.7",
+    "grunt-contrib-connect": "^0.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mach3/flashspritejs.git"
+  },
+  "keywords": [
+    "flash",
+    "sprite",
+    "animation"
+  ],
+  "author": "mach3 <http://github.com/mach3>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mach3/flashspritejs/issues"
+  },
+  "homepage": "https://github.com/mach3/flashspritejs"
+}
