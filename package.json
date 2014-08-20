@@ -1,6 +1,6 @@
 {
   "name": "flashsprite.js",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Load and play sprite animations made by Flash CS6+",
   "main": "dist/flashsprite.js",
   "dependencies": {
