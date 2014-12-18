@@ -3,7 +3,7 @@
  * --------------
  * Load and play sprite animations made by Flash CS6+
  *
- * @version 0.9.2
+ * @version 0.9.3 (2014/12/18)
  * @author mach3 <http://github.com/mach3>
  * @url http://github.com/mach3/flashspritejs
  * @require jquery.js
@@ -138,7 +138,7 @@
 			 * Go to next frame
 			 */
 			this.next = function(){
-				var next = (this.index + 1) % (this.vars.length - 1);
+				var next = (this.index + 1) % this.vars.length;
 				if(this.options.repeat || next){
 					this._goto(next);
 				}

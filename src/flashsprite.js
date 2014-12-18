@@ -127,7 +127,7 @@
 			 * Go to next frame
 			 */
 			this.next = function(){
-				var next = (this.index + 1) % (this.vars.length - 1);
+				var next = (this.index + 1) % this.vars.length;
 				if(this.options.repeat || next){
 					this._goto(next);
 				}
